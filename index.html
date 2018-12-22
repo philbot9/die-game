@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+
+<head>
+  <title>Dice Game</title>
+</head>
+
+<body>
+  <div class="container">
+    <div class="die-container">
+      <img id="die1" src="images/die1.png" />
+    </div>
+
+    <div class="result-container">
+      <strong id="result">Guess the result</strong>
+    </div>
+
+    <div class="input-container">
+      <label for="user-guess">Your guess: </label>
+      <input id="user-guess" name="user-guess" type="number" min=1 max=6 value=1 />
+      <br />
+      <br />
+
+      <button id="roll-button">Roll!</button>
+
+      <br />
+      <br />
+
+      Your money: $
+      <strong id="money"></strong>
+    </div>
+
+
+  </div>
+
+  <script>
+    var die1Image = document.querySelector('#die1')
+    var rollButton = document.querySelector('#roll-button')
+    var guessInput = document.querySelector('#user-guess')
+    var resultText = document.querySelector('#result')
+    var moneyText = document.querySelector('#money')
+
+    var money = 10
+    moneyText.innerHTML = money
+
+    rollButton.onclick = rollDie
+
+    function rollDie() {
+      var rollingCount = 0
+      var dieFace
+
+      resultText.innerHTML = "rolling..."
+      resultText.style = "color: white"
+
+      let intervalId = setInterval(() => {
+        if (rollingCount < 10) {
+          dieFace = getRandomDieFace()
+          die1Image.src = "images/die" + dieFace + ".png"
+        } else {
+          clearInterval(intervalId)
+          validateResult(dieFace)
+        }
+
+        rollingCount = rollingCount + 1
+      }, 100)
+    }
+
+    function validateResult(dieFace) {
+      var userGuess = parseInt(guessInput.value, 10)
+
+      if (userGuess === dieFace) {
+        resultText.innerHTML = "YOU GOT IT RIGHT!!!"
+        resultText.style = "color: green"
+        money = money + 2
+      } else {
+        resultText.innerHTML = "WROOOOOOOOONG!"
+        resultText.style = "color: black"
+        money = money - 1
+      }
+
+      moneyText.innerHTML = money
+
+      if (money <= 0) {
+        alert("You lost all your money!")
+        location.reload()
+      }
+    }
+
+    function getRandomDieFace() {
+      return Math.floor(Math.random() * 6) + 1
+    }
+
+  </script>
+
+
+  <style>
+    body {
+      background-color: grey;
+      font-family: sans-serif;
+    }
+
+    .container {
+      width: 400px;
+      margin: 20px auto;
+      padding: 20px;
+      padding-top: 50px;
+      border: 3px solid black;
+      background: brown;
+    }
+
+    .die-container {
+      width: 100%;
+      text-align: center;
+      padding: 10px 0;
+    }
+
+    .input-container {
+      margin: 20px auto 0 auto;
+      text-align: center;
+      background-color: white;
+      padding: 20px 0;
+    }
+
+    .input-container label {
+      margin-right: 5px;
+      font-weight: bold;
+      font-size: 16pt;
+      line-height: 18pt;
+    }
+
+    .input-container input {
+      font-size: 18pt;
+      text-align: center;
+      width: 35px;
+    }
+
+    .input-container button {
+      font-size: 18pt;
+      margin-top: 10px;
+      width: 150px;
+    }
+
+    .result-container {
+      padding-top: 20px;
+      text-align: center;
+      font-size: 18pt;
+      color: white;
+    }
+  </style>
+
+
+</body>
+
+</html>
